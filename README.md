@@ -100,4 +100,6 @@ terraform apply --auto-approve
 | <a name="output_ecs_task_cpu"></a> [ecs\_task\_cpu](#output\_ecs\_task\_cpu) | value of the ecs task cpu |
 | <a name="output_ecs_task_memory"></a> [ecs\_task\_memory](#output\_ecs\_task\_memory) | value of the ecs task memory |
 | <a name="output_security_group_ids"></a> [security\_group\_ids](#output\_security\_group\_ids) | value of the security group ids |
+| <a name="output_subnets"></a> [subnets](#output\_subnets) | value of the subnet ids |
+| <a name="output_vpc_id"></a> [vpc\_id](#output\_vpc\_id) | value of the vpc id |
 <!-- END_TF_DOCS -->
