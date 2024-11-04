@@ -43,7 +43,7 @@ variable "alb" {
       target_port          = 80
       target_protocol      = "HTTP"
       target_type          = "ip"
-      listener_port        = "3000"
+      listener_port        = "80"
       listener_protocol    = "HTTP"
       listener_action_type = "forward"
       health_check = {
@@ -78,6 +78,34 @@ variable "sg" {
         revoke_rules_on_delete = true
         ingress                = "../rules/alb_ingress_rules.csv"
         egress                 = "../rules/alb_egress_rules.csv"
+      }
+    }
+  }
+}
+
+variable "ecs" {
+  description = "values for the ecs"
+  default = {
+    HML = {}
+    PRD = {
+      tpl = {
+        file           = "../templates/ecs/myapp.json.tpl"
+        app_image      = "barcelos3/app-v1:latest"
+        app_port       = 80
+        fargate_cpu    = "1024"
+        fargate_memory = "2048"
+        region         = "us-east-1"
+      }
+      cluster = {
+        name               = "demo-cluster"
+        family             = "demo-family"
+        execution_role_arn = "aws_iam_role.ecs_task_execution_role.arn"
+      }
+      service = {
+        name             = "demo-service"
+        container_name   = "demo-container"
+        container_port   = 80
+        assign_public_ip = true
       }
     }
   }

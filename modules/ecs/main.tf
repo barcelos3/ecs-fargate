@@ -1,5 +1,5 @@
 resource "aws_ecs_cluster" "ecs_clsuter" {
-  name = "cb-cluster"
+  name = var.ecs_cluster_name
 }
 
 data "template_file" "cb_app" {
@@ -17,6 +17,7 @@ data "template_file" "cb_app" {
 resource "aws_ecs_task_definition" "app" {
   family                   = var.family
   execution_role_arn       = var.execution_role_arn
+  task_role_arn            = var.task_role_arn
   network_mode             = var.network_mode
   requires_compatibilities = var.requires_compatibilities
   cpu                      = var.tpl_fargate_cpu
@@ -24,24 +25,22 @@ resource "aws_ecs_task_definition" "app" {
   container_definitions    = data.template_file.cb_app.rendered
 }
 
-resource "aws_ecs_service" "main" {
-  name            = "cb-service"
-  cluster         = aws_ecs_cluster.main.id
+resource "aws_ecs_service" "ecs_service" {
+  name            = var.ecs_service_name
+  cluster         = aws_ecs_cluster.ecs_clsuter.id
   task_definition = aws_ecs_task_definition.app.arn
-  desired_count   = var.app_count
-  launch_type     = "FARGATE"
+  desired_count   = var.ecs_service_desired_count
+  launch_type     = var.ecs_service_launch_type
 
   network_configuration {
-    security_groups  = [aws_security_group.ecs_tasks.id]
-    subnets          = aws_subnet.private.*.id
-    assign_public_ip = true
+    security_groups  = var.ecs_service_security_group
+    subnets          = var.ecs_service_subnet_ids
+    assign_public_ip = var.ecs_service_assign_public_ip
   }
 
   load_balancer {
-    target_group_arn = aws_alb_target_group.app.id
-    container_name   = "cb-app"
-    container_port   = var.app_port
+    target_group_arn = var.ecs_service_lb_target_group_arn
+    container_name   = var.ecs_service_container_name
+    container_port   = var.ecs_service_container_port
   }
-
-  depends_on = [aws_alb_listener.front_end, aws_iam_role_policy_attachment.ecs-task-execution-role-policy-attachment]
 }

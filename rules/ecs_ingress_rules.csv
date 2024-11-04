@@ -1,3 +1,4 @@
 from_port,to_port,protocol,cidr_blocks
-22,22,tcp,"0.0.0.0/0"
+80,80,tcp,"0.0.0.0/0"
+3000,3000,tcp,"0.0.0.0/0"
 

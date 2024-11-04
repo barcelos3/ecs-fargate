@@ -18,3 +18,8 @@ output "zone_id" {
   value       = aws_alb.application_load_balancer.zone_id
 }
 
+output "listener" {
+  description = "Listener of the Application Load Balancer"
+  value       = aws_alb_listener.listener
+
+}

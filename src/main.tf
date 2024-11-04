@@ -1,127 +1,28 @@
-module "ecs" {
-  source = "terraform-aws-modules/ecs/aws"
+module "cluster_ecs" {
+  source = "../modules/ecs"
 
-  cluster_name = "ecs-integrated"
+  template         = var.ecs[terraform.workspace].tpl.file
+  ecs_cluster_name = var.ecs[terraform.workspace].cluster.name
 
-  cluster_configuration = {
-    execute_command_configuration = {
-      logging = "OVERRIDE"
-      log_configuration = {
-        cloud_watch_log_group_name = "/aws/ecs/aws-ec2"
-      }
-    }
-  }
+  tpl_app_image      = var.ecs[terraform.workspace].tpl.app_image
+  tpl_app_port       = var.ecs[terraform.workspace].tpl.app_port
+  tpl_fargate_cpu    = var.ecs[terraform.workspace].tpl.fargate_cpu
+  tpl_fargate_memory = var.ecs[terraform.workspace].tpl.fargate_memory
+  tpl_aws_region     = var.ecs[terraform.workspace].tpl.region
 
-  fargate_capacity_providers = {
-    FARGATE = {
-      default_capacity_provider_strategy = {
-        weight = 50
-      }
-    }
-    FARGATE_SPOT = {
-      default_capacity_provider_strategy = {
-        weight = 50
-      }
-    }
-  }
+  family             = var.ecs[terraform.workspace].cluster.family
+  execution_role_arn = aws_iam_role.ecsTaskExecutionRole.arn
+  task_role_arn      = aws_iam_role.ecsTaskRole.arn
 
-  services = {
-    ecsdemo-frontend = {
-      cpu    = 1024
-      memory = 4096
+  ecs_service_name                = var.ecs[terraform.workspace].service.name
+  ecs_service_security_group      = [aws_security_group.sg[0].id, aws_security_group.sg[1].id]
+  ecs_service_subnet_ids          = [module.vpc.private_subnets[0], module.vpc.private_subnets[1]]
+  ecs_service_lb_target_group_arn = module.alb.arn
 
-      # Container definition(s)
-      container_definitions = {
-
-        fluent-bit = {
-          cpu       = 512
-          memory    = 1024
-          essential = true
-          image     = "906394416424.dkr.ecr.us-west-2.amazonaws.com/aws-for-fluent-bit:stable"
-          firelens_configuration = {
-            type = "fluentbit"
-          }
-          memory_reservation = 50
-        }
-
-        ecs-sample = {
-          cpu       = 512
-          memory    = 1024
-          essential = true
-          image     = "public.ecr.aws/aws-containers/ecsdemo-frontend:776fd50"
-          port_mappings = [
-            {
-              name          = "ecs-sample"
-              containerPort = 80
-              protocol      = "tcp"
-            }
-          ]
-
-          # Example image used requires access to write to root filesystem
-          readonly_root_filesystem = false
-
-          dependencies = [{
-            containerName = "fluent-bit"
-            condition     = "START"
-          }]
-
-          enable_cloudwatch_logging = false
-          log_configuration = {
-            logDriver = "awsfirelens"
-            options = {
-              Name                    = "firehose"
-              region                  = "eu-west-1"
-              delivery_stream         = "my-stream"
-              log-driver-buffer-limit = "2097152"
-            }
-          }
-          memory_reservation = 100
-        }
-      }
-
-      service_connect_configuration = {
-        namespace = "example"
-        service = {
-          client_alias = {
-            port     = 80
-            dns_name = "ecs-sample"
-          }
-          port_name      = "ecs-sample"
-          discovery_name = "ecs-sample"
-        }
-      }
-
-      load_balancer = {
-        service = {
-          target_group_arn = "arn:aws:elasticloadbalancing:eu-west-1:1234567890:targetgroup/bluegreentarget1/209a844cd01825a4"
-          container_name   = "ecs-sample"
-          container_port   = 80
-        }
-      }
-
-      subnet_ids = ["subnet-abcde012", "subnet-bcde012a", "subnet-fghi345a"]
-      security_group_rules = {
-        alb_ingress_3000 = {
-          type                     = "ingress"
-          from_port                = 80
-          to_port                  = 80
-          protocol                 = "tcp"
-          description              = "Service port"
-          source_security_group_id = "sg-12345678"
-        }
-        egress_all = {
-          type        = "egress"
-          from_port   = 0
-          to_port     = 0
-          protocol    = "-1"
-          cidr_blocks = ["0.0.0.0/0"]
-        }
-      }
-    }
-  }
-
-  tags = {
-    Environment = "Development"
-    Project     = "Example"
-  }
+  depends_on = [
+    module.vpc,
+    module.alb,    
+    aws_iam_role.ecsTaskExecutionRole,
+    aws_iam_role.ecsTaskRole
+  ]
 }

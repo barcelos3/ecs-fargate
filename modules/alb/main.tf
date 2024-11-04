@@ -6,7 +6,7 @@ resource "aws_alb" "application_load_balancer" {
   security_groups    = var.security_groups_ids
 }
 
-resource "aws_lb_target_group" "target_group" {
+resource "aws_alb_target_group" "target_group" {
   name        = var.target.target_name
   port        = var.target.target_port
   protocol    = var.target.target_protocol
@@ -24,13 +24,13 @@ resource "aws_lb_target_group" "target_group" {
   }
 }
 
-resource "aws_lb_listener" "listener" {
+resource "aws_alb_listener" "listener" {
   load_balancer_arn = aws_alb.application_load_balancer.arn
   port              = var.listener.listener_port
   protocol          = var.listener.listener_protocol
 
   default_action {
     type             = var.listener.listener_action_type
-    target_group_arn = aws_lb_target_group.target_group.arn
+    target_group_arn = aws_alb_target_group.target_group.arn
   }
 }
