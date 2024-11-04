@@ -100,5 +100,10 @@ No modules.
 
 ## Outputs
 
-No outputs.
+| Name | Description |
+|------|-------------|
+| <a name="output_ecs_service_name"></a> [ecs\_service\_name](#output\_ecs\_service\_name) | value of the ECS service name |
+| <a name="output_name"></a> [name](#output\_name) | value of the ECS cluster name |
+| <a name="output_task_cpu"></a> [task\_cpu](#output\_task\_cpu) | value of the ECS task memory |
+| <a name="output_task_memory"></a> [task\_memory](#output\_task\_memory) | value of the ECS task memory |
 <!-- END_TF_DOCS -->
