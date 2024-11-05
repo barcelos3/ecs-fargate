@@ -1,4 +1,4 @@
-## Desafio GlobalHitss |
+## Desafio |
 
 ```bash
     Aqui está o que você precisa fazer:
@@ -75,6 +75,7 @@ terraform apply --auto-approve
 | [aws_iam_role.ecsTaskExecutionRole](https://registry.terraform.io/providers/hashicorp/aws/5.74.0/docs/resources/iam_role) | resource |
 | [aws_iam_role.ecsTaskRole](https://registry.terraform.io/providers/hashicorp/aws/5.74.0/docs/resources/iam_role) | resource |
 | [aws_iam_role_policy_attachment.ecsTaskExecutionRole_policy](https://registry.terraform.io/providers/hashicorp/aws/5.74.0/docs/resources/iam_role_policy_attachment) | resource |
+| [aws_iam_role_policy_attachment.ecsTaskRole_policy](https://registry.terraform.io/providers/hashicorp/aws/5.74.0/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_security_group.sg](https://registry.terraform.io/providers/hashicorp/aws/5.74.0/docs/resources/security_group) | resource |
 | [aws_iam_policy_document.assume_role_policy](https://registry.terraform.io/providers/hashicorp/aws/5.74.0/docs/data-sources/iam_policy_document) | data source |
 
@@ -82,7 +83,7 @@ terraform apply --auto-approve
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_alb"></a> [alb](#input\_alb) | values for the alb | `map` | <pre>{<br>  "HML": {},<br>  "PRD": {<br>    "health_check": {<br>      "healthy_threshold": 3,<br>      "interval": 30,<br>      "matcher": "200",<br>      "path": "/",<br>      "port": "traffic-port",<br>      "protocol": "HTTP",<br>      "timeout": 10,<br>      "unhealthy_threshold": 2<br>    },<br>    "listener_action_type": "forward",<br>    "listener_port": "80",<br>    "listener_protocol": "HTTP",<br>    "name": "desafio-load-balancer",<br>    "target_name": "test",<br>    "target_port": 80,<br>    "target_protocol": "HTTP",<br>    "target_type": "ip"<br>  }<br>}</pre> | no |
+| <a name="input_alb"></a> [alb](#input\_alb) | values for the alb | `map` | <pre>{<br>  "HML": {},<br>  "PRD": {<br>    "healthy_threshold": 3,<br>    "interval": 30,<br>    "listener_action_type": "forward",<br>    "listener_port": "80",<br>    "listener_protocol": "HTTP",<br>    "matcher": "200",<br>    "name": "desafio-load-balancer",<br>    "path": "/",<br>    "port": "traffic-port",<br>    "protocol": "HTTP",<br>    "target_name": "test",<br>    "target_port": 80,<br>    "target_protocol": "HTTP",<br>    "target_type": "ip",<br>    "timeout": 10,<br>    "unhealthy_threshold": 2<br>  }<br>}</pre> | no |
 | <a name="input_ecs"></a> [ecs](#input\_ecs) | values for the ecs | `map` | <pre>{<br>  "HML": {},<br>  "PRD": {<br>    "cluster": {<br>      "execution_role_arn": "aws_iam_role.ecs_task_execution_role.arn",<br>      "family": "demo-family",<br>      "name": "demo-cluster"<br>    },<br>    "service": {<br>      "assign_public_ip": true,<br>      "container_name": "demo-container",<br>      "container_port": 80,<br>      "name": "demo-service"<br>    },<br>    "tpl": {<br>      "app_image": "barcelos3/app-v1:latest",<br>      "app_port": 80,<br>      "fargate_cpu": "1024",<br>      "fargate_memory": "2048",<br>      "file": "../templates/ecs/myapp.json.tpl",<br>      "region": "us-east-1"<br>    }<br>  }<br>}</pre> | no |
 | <a name="input_sg"></a> [sg](#input\_sg) | values for the security group | `map` | <pre>{<br>  "HML": {},<br>  "PRD": {<br>    "alb": {<br>      "description": "Security group for alb app",<br>      "egress": "../rules/alb_egress_rules.csv",<br>      "ingress": "../rules/alb_ingress_rules.csv",<br>      "name": "demo-sg-alb",<br>      "revoke_rules_on_delete": true<br>    },<br>    "ecs": {<br>      "description": "Security group for ecs app",<br>      "egress": "../rules/ecs_egress_rules.csv",<br>      "ingress": "../rules/ecs_ingress_rules.csv",<br>      "name": "demo-sg-ecs",<br>      "revoke_rules_on_delete": true<br>    }<br>  }<br>}</pre> | no |
 | <a name="input_subnet"></a> [subnet](#input\_subnet) | values for the subnets | `map` | <pre>{<br>  "HML": {},<br>  "PRD": {<br>    "private": {<br>      "cidr_block": [<br>        "10.0.1.0/24",<br>        "10.0.2.0/24"<br>      ],<br>      "name": "sub-pvt",<br>      "route_table_name": "private-rt"<br>    },<br>    "public": {<br>      "cidr_block": [<br>        "10.0.101.0/24",<br>        "10.0.102.0/24"<br>      ],<br>      "name": "sub-public",<br>      "route_table_name": "public-rt"<br>    },<br>    "region": [<br>      "use1-az1",<br>      "use1-az2",<br>      "use1-az3"<br>    ]<br>  }<br>}</pre> | no |

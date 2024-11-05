@@ -46,16 +46,15 @@ variable "alb" {
       listener_port        = "80"
       listener_protocol    = "HTTP"
       listener_action_type = "forward"
-      health_check = {
-        healthy_threshold   = 3
-        interval            = 30
-        protocol            = "HTTP"
-        matcher             = "200"
-        timeout             = 10
-        path                = "/"
-        unhealthy_threshold = 2
-        port                = "traffic-port"
-      }
+      healthy_threshold    = 3
+      interval             = 30
+      protocol             = "HTTP"
+      matcher              = "200"
+      timeout              = 10
+      path                 = "/"
+      unhealthy_threshold  = 2
+      port                 = "traffic-port"
+
     }
   }
 }

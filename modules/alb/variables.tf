@@ -25,33 +25,83 @@ variable "security_groups_ids" {
   type        = list(string)
 }
 
-variable "target" {
-  description = "values for the alb"
-  type = object({
-    target_name     = string
-    target_port     = number
-    target_protocol = string
-    target_type     = string
-    target_vpc_id   = string
-    health_check = object({
-      healthy_threshold   = number
-      interval            = number
-      protocol            = string
-      matcher             = string
-      timeout             = number
-      path                = string
-      unhealthy_threshold = number
-      port                = string
-    })
-  })
+variable "listener_port" {
+  description = "Port for the ALB listener"
+  type        = string
 }
 
-variable "listener" {
-  description = "values for the alb listener"
-  type = object({
-    listener_port        = string
-    listener_protocol    = string
-    listener_action_type = string
-  })
+variable "listener_protocol" {
+  description = "Protocol for the ALB listener"
+  type        = string
+}
+
+variable "listener_action_type" {
+  description = "Action type for the ALB listener"
+  type        = string
+}
+
+variable "target_name" {
+  description = "Name of the target"
+  type        = string
+}
+
+variable "target_port" {
+  description = "Port of the target"
+  type        = number
+}
+
+variable "target_protocol" {
+  description = "Protocol of the target"
+  type        = string
+}
+
+variable "target_type" {
+  description = "Type of the target"
+  type        = string
+}
+
+variable "target_vpc_id" {
+  description = "VPC ID of the target"
+  type        = string
+}
+
+variable "health_check_healthy_threshold" {
+  description = "Healthy threshold for the health check"
+  type        = number
+}
+
+variable "health_check_interval" {
+  description = "Interval for the health check"
+  type        = number
+}
+
+variable "health_check_protocol" {
+  description = "Protocol for the health check"
+  type        = string
+}
+
+variable "health_check_matcher" {
+  description = "Matcher for the health check"
+  type        = string
+}
+
+variable "health_check_timeout" {
+  description = "Timeout for the health check"
+  type        = number
+}
+
+variable "health_check_path" {
+  description = "Path for the health check"
+  type        = string
+}
+
+variable "health_check_unhealthy_threshold" {
+  description = "Unhealthy threshold for the health check"
+  type        = number
+}
+
+variable "health_check_port" {
+  description = "Port for the health check"
+  type        = string
 }
 

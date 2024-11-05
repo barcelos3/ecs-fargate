@@ -71,19 +71,33 @@ No modules.
 | Name | Type |
 |------|------|
 | [aws_alb.application_load_balancer](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/alb) | resource |
-| [aws_lb_listener.listener](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb_listener) | resource |
-| [aws_lb_target_group.target_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb_target_group) | resource |
+| [aws_alb_listener.listener](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/alb_listener) | resource |
+| [aws_alb_target_group.target_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/alb_target_group) | resource |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_health_check_healthy_threshold"></a> [health\_check\_healthy\_threshold](#input\_health\_check\_healthy\_threshold) | Healthy threshold for the health check | `number` | n/a | yes |
+| <a name="input_health_check_interval"></a> [health\_check\_interval](#input\_health\_check\_interval) | Interval for the health check | `number` | n/a | yes |
+| <a name="input_health_check_matcher"></a> [health\_check\_matcher](#input\_health\_check\_matcher) | Matcher for the health check | `string` | n/a | yes |
+| <a name="input_health_check_path"></a> [health\_check\_path](#input\_health\_check\_path) | Path for the health check | `string` | n/a | yes |
+| <a name="input_health_check_port"></a> [health\_check\_port](#input\_health\_check\_port) | Port for the health check | `string` | n/a | yes |
+| <a name="input_health_check_protocol"></a> [health\_check\_protocol](#input\_health\_check\_protocol) | Protocol for the health check | `string` | n/a | yes |
+| <a name="input_health_check_timeout"></a> [health\_check\_timeout](#input\_health\_check\_timeout) | Timeout for the health check | `number` | n/a | yes |
+| <a name="input_health_check_unhealthy_threshold"></a> [health\_check\_unhealthy\_threshold](#input\_health\_check\_unhealthy\_threshold) | Unhealthy threshold for the health check | `number` | n/a | yes |
 | <a name="input_internal"></a> [internal](#input\_internal) | Boolean to create an internal or external ALB, default is false | `bool` | `false` | no |
-| <a name="input_listener"></a> [listener](#input\_listener) | values for the alb listener | <pre>object({<br>    listener_port        = string<br>    listener_protocol    = string<br>    listener_action_type = string<br>  })</pre> | n/a | yes |
+| <a name="input_listener_action_type"></a> [listener\_action\_type](#input\_listener\_action\_type) | Action type for the ALB listener | `string` | n/a | yes |
+| <a name="input_listener_port"></a> [listener\_port](#input\_listener\_port) | Port for the ALB listener | `string` | n/a | yes |
+| <a name="input_listener_protocol"></a> [listener\_protocol](#input\_listener\_protocol) | Protocol for the ALB listener | `string` | n/a | yes |
 | <a name="input_name"></a> [name](#input\_name) | Name of the Application Load Balancer | `string` | n/a | yes |
 | <a name="input_security_groups_ids"></a> [security\_groups\_ids](#input\_security\_groups\_ids) | List of security groups to attach to the ALB | `list(string)` | n/a | yes |
 | <a name="input_subnets"></a> [subnets](#input\_subnets) | List of subnets to attach to the ALB | `list(string)` | n/a | yes |
-| <a name="input_target"></a> [target](#input\_target) | values for the alb | <pre>object({<br>    target_name     = string<br>    target_port     = number<br>    target_protocol = string<br>    target_type     = string<br>    target_vpc_id   = string<br>    health_check = object({<br>      healthy_threshold   = number<br>      interval            = number<br>      protocol            = string<br>      matcher             = string<br>      timeout             = number<br>      path                = string<br>      unhealthy_threshold = number<br>      port                = string<br>    })<br>  })</pre> | n/a | yes |
+| <a name="input_target_name"></a> [target\_name](#input\_target\_name) | Name of the target | `string` | n/a | yes |
+| <a name="input_target_port"></a> [target\_port](#input\_target\_port) | Port of the target | `number` | n/a | yes |
+| <a name="input_target_protocol"></a> [target\_protocol](#input\_target\_protocol) | Protocol of the target | `string` | n/a | yes |
+| <a name="input_target_type"></a> [target\_type](#input\_target\_type) | Type of the target | `string` | n/a | yes |
+| <a name="input_target_vpc_id"></a> [target\_vpc\_id](#input\_target\_vpc\_id) | VPC ID of the target | `string` | n/a | yes |
 | <a name="input_type"></a> [type](#input\_type) | (Optional) Type of load balancer to create. Possible values are application, gateway, or network. The default value is application. | `string` | `"application"` | no |
 
 ## Outputs
@@ -92,6 +106,8 @@ No modules.
 |------|-------------|
 | <a name="output_arn"></a> [arn](#output\_arn) | ARN of the Application Load Balancer |
 | <a name="output_dns_name"></a> [dns\_name](#output\_dns\_name) | DNS name of the Application Load Balancer |
+| <a name="output_listener"></a> [listener](#output\_listener) | Listener of the Application Load Balancer |
 | <a name="output_name"></a> [name](#output\_name) | Name of the Application Load Balancer |
+| <a name="output_target_group_arn"></a> [target\_group\_arn](#output\_target\_group\_arn) | ARN of the target group |
 | <a name="output_zone_id"></a> [zone\_id](#output\_zone\_id) | Zone ID of the Application Load Balancer |
 <!-- END_TF_DOCS -->

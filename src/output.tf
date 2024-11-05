@@ -50,6 +50,5 @@ output "subnets" {
   value = [{
     "private" : module.vpc.private_subnets[*],
     "public" : module.vpc.public_subnets[*]
-
   }]
 }

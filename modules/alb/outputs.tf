@@ -23,3 +23,8 @@ output "listener" {
   value       = aws_alb_listener.listener
 
 }
+
+output "target_group_arn" {
+  description = "ARN of the target group"
+  value       = aws_alb_target_group.target_group.arn
+}

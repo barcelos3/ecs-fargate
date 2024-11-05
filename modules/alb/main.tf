@@ -7,30 +7,30 @@ resource "aws_alb" "application_load_balancer" {
 }
 
 resource "aws_alb_target_group" "target_group" {
-  name        = var.target.target_name
-  port        = var.target.target_port
-  protocol    = var.target.target_protocol
-  target_type = var.target.target_type
-  vpc_id      = var.target.target_vpc_id
+  name        = var.target_name
+  port        = var.target_port
+  protocol    = var.target_protocol
+  target_type = var.target_type
+  vpc_id      = var.target_vpc_id
   health_check {
-    path                = var.target.health_check.path
-    protocol            = var.target.health_check.protocol
-    matcher             = var.target.health_check.matcher
-    port                = var.target.health_check.port
-    healthy_threshold   = var.target.health_check.healthy_threshold
-    unhealthy_threshold = var.target.health_check.unhealthy_threshold
-    timeout             = var.target.health_check.timeout
-    interval            = var.target.health_check.interval
+    path                = var.health_check_path
+    protocol            = var.health_check_protocol
+    matcher             = var.health_check_matcher
+    port                = var.health_check_port
+    healthy_threshold   = var.health_check_healthy_threshold
+    unhealthy_threshold = var.health_check_unhealthy_threshold
+    timeout             = var.health_check_timeout
+    interval            = var.health_check_interval
   }
 }
 
 resource "aws_alb_listener" "listener" {
   load_balancer_arn = aws_alb.application_load_balancer.arn
-  port              = var.listener.listener_port
-  protocol          = var.listener.listener_protocol
+  port              = var.listener_port
+  protocol          = var.listener_protocol
 
   default_action {
-    type             = var.listener.listener_action_type
+    type             = var.listener_action_type
     target_group_arn = aws_alb_target_group.target_group.arn
   }
 }

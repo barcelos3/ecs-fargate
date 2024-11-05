@@ -24,3 +24,7 @@ resource "aws_iam_role" "ecsTaskRole" {
   assume_role_policy = data.aws_iam_policy_document.assume_role_policy.json
 }
 
+resource "aws_iam_role_policy_attachment" "ecsTaskRole_policy" {
+  role       = aws_iam_role.ecsTaskRole.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess"
+}
